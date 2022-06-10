@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Polls QA</title>
+</head>
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+input {
+  height: 100%;
+  width: 100%;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+<body>
+	<form action="/input/{}">
+		<h2>질문 상세</h2>
+		<label>요약</label>
+		<input type="text" name="summary" id="summary" value="요약 1"><br>
+		<label>Q: </label>
+		<input type="text" name="question" id="question" value="질문 1"><br>
+		<label>선택지</label><br>
+		<ul id="choice">
+			<li><input type="text" name="choice_1" id="choice_1" value="선택지 1"></li>
+		</ul>
+		<button type="button" onclick="addChoice()">선택지 추가</button>
+		<h2>여론조사 결과표</h2>
+		<table id="result">
+			<tr>
+				<td></th>
+				<td><input type="text" name="colname_1" id="colname_1" value="col_1"></th>
+				<th><button type="button" onclick="insertCollumn()">열 추가</button></td>
+			</tr>
+			<tr>
+				<td><input type="text" name="rowname_1" id="rowname_1" value="row_1"></th>
+				<td><input type="number" name="data_1_1" id="data_1_1" value="11"></td>
+			</tr>
+			<tr>
+				<th><button type="button" onclick="insertRow()">행 추가</button></th>
+			</tr>
+		</table>
+		<input type="submit" name="submit" value="질문 등록">
+	</form>
+</body>
+
+<script type="text/javascript">
+	function insertCollumn() {
+		var table = document.getElementById("result");
+        
+		var rows = table.getElementsByTagName("tr");
+        let row_limit = rows.length;
+        
+        var cols = rows[0].getElementsByTagName("td");
+        let col_idx = cols.length;
+        
+        for (let i = 0; i < row_limit; i++) {
+        	var cell = rows[i].insertCell(col_idx);
+            if (i == 0) {
+            	cell.innerHTML = '<input type="text" id="col_'+i+'_'+col_idx+'" name="col_'+i+'_'+col_idx+'" value="col_'+i+'_'+col_idx+'" />';
+            } else {
+            	cell.innerHTML = '<input type="number" id="data_'+i+'_'+col_idx+'" name="data_'+i+'_'+col_idx+'" value="0" />';
+            };
+        }
+	};
+
+	function insertRow() {
+    	var table = document.getElementById("result");
+        var rows = table.getElementsByTagName("tr");
+        var cols = rows[0].getElementsByTagName("td");
+        
+        let row_idx = rows.length-1;
+        let col_limit = cols.length;
+        var row = table.insertRow(rows.length-1);
+        for (let i = 0; i < col_limit; i++) {
+        	var cell = row.insertCell(i);
+            if (i == 0) {
+            	cell.innerHTML = '<input type="text" id="row_'+row_idx+'_'+i+'" name="row_'+row_idx+'_'+i+'" value="row_'+row_idx+'_'+i+'" />';
+            } else {
+            	cell.innerHTML = '<input type="number" id="data_'+row_idx+'_'+i+'" name="data_'+row_idx+'_'+i+'" value="0" />';
+            };
+        }
+	};
+
+	function addChoice() {
+		const node = document.createElement("li");
+		var ul = document.getElementById("choice");
+		var lis = ul.getElementsByTagName("li");
+		let liID = lis.length+1;
+		node.innerHTML = '<input type="text" id="choice_'+liID+'" name="choice_'+liID+'" value="선택지 '+liID+'"/>'
+		ul.appendChild(node);
+	}
+</script>
+
+</html>

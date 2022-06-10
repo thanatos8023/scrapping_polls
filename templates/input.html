@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Polls input page</title>
+</head>
+
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+input {
+  height: 100%;
+  width: 100%;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+<body>
+	<h1>여론조사 수집 페이지</h1>
+	<form action="/input" method="post">
+		<h3>여론조사 기본</h3>
+		<table id="basic">
+			<colgroup>
+				<col width="20%">
+				<col width="20%">
+				<col width="*">
+			</colgroup>
+			<tbody>
+				<tr>
+					<th colspan="2">등록 글번호</th>
+					<td colspan="2"><input type="text" name="reg_idx" id="reg_idx" value="1"></td>
+				</tr>
+				<tr>
+					<th rowspan="3">여론조사 명칭</th>
+					<th>선거구분</th>
+					<td colspan="2"><input type="text" name="elect_category" id="elect_category" value="제8회 전국동시지방선거"></td>
+				</tr>
+				<tr>
+					<th>지역</th>
+					<td colspan="2"><input type="text" name="elect_area" id="elect_area" value="서울특별시 전체"></td>
+				</tr>
+				<tr>
+					<th>선거명</th>
+					<td colspan="2"><input type="text" name="elect_name" id="elect_name" value="광역단체장선거"></td>
+				</tr>
+				<tr>
+					<th colspan="2">조사의뢰자</th>
+					<td colspan="2"><input type="text" name="client_name" id="client_name" value="주-월간지:시사저널"></td>
+				</tr>
+				<tr>
+					<th colspan="2">조사기관명</th>
+					<td colspan="2"><input type="text" name="subject" id="subject" value="조원씨앤아이"></td>
+				</tr>
+				<tr>
+					<th colspan="2">공동조사기관명</th>
+					<td colspan="2"><input type="text" name="cosubject" id="cosubject"></td>
+				</tr>
+				<tr>
+					<th colspan="2">조사지역</th>
+					<td colspan="2"><input type="text" name="poll_area" id="poll_area" value="서울특별시"></td>
+				</tr>
+				<tr>
+					<th colspan="2">조사일수</th>
+					<td colspan="2"><input type="number" name="poll_day" id="poll_day" value="1"></td>
+				</tr>
+				<tr>
+					<th colspan="2">조사대상</th>
+					<td colspan="2"><input type="text" name="poll_target" id="poll_target" value="서울특별시에 거주하는 만 18세 이상 남녀"></td>
+				</tr>
+				<tr>
+					<th>조사일시</th>
+					<td><input type="datetime-local" name="polltime_start_1" id="polltime_start_1" value="2022-01-22T10:00"></td>
+					<td>~</td>
+					<td><input type="datetime-local" name="polltime_end_1" id="polltime_end_1" value="2022-01-22T18:00"></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td colspan="3"><button type="button" onclick="insertDate()">+</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>표본의 크기</h3>
+		<table id="sampleSize">
+			<tr class="th">
+				<th colspan="2">구분</th>
+				<th align="center">
+					<span class="tooltip" title="실제 조사된 응답자 수를 말하며, 목표할당 사례수와 비교할 수 있도록 성별, 연령대별, 지역별로 분류" style="color:blue">조사완료 사례수(명)</span>
+				</th>
+				<th align="center">
+					<span class="tooltip" title="조사완료 사례수를 성별-연령대별-지역별 등의 구성 비율에 따라 비례할당한 사례수" style="color:blue">가중값 적용 기준 사례수(명)</span>
+				</th>
+			</tr>
+			<tr class="th">
+				<th colspan="2">전체</th>
+				<td class="tr"><input type="number" name="whole_orig" id="whole_orig" value="521"></td>
+				<td class="tr"><input type="number" name="whole_weight" id="whole_weight" value="521"></td>
+			</tr>
+			<tr>
+				<th rowspan="2">성별</th>
+				<th>남</th>
+				<td><input type="number" name="man_orig" id="man_orig" value="297"></td>
+				<td><input type="number" name="man_weight" id="man_weight" value="267"></td>
+			</tr>
+			<tr>
+				<th>여</th>
+				<td><input type="number" name="woman_orig" id="woman_orig" value="224"></td>
+				<td><input type="number" name="woman_weight" id="woman_weight" value="254"></td>
+			</tr>
+			<tr>
+				<th rowspan="5">연령대별</th>
+				<th>18~29세</th>
+				<td><input type="number" name="_20_orig" id="_20_orig" value="52"></td>
+				<td><input type="number" name="_20_weight" id="_20_weight" value="50"></td>
+			</tr>
+			<tr>
+				<th>30대</th>
+				<td><input type="number" name="_30_orig" id="_30_orig" value="41"></td>
+				<td><input type="number" name="_30_weight" id="_30_weight" value="38"></td>
+			</tr>
+			<tr>
+				<th>40대</th>
+				<td><input type="number" name="_40_orig" id="_40_orig" value="60"></td>
+				<td><input type="number" name="_40_weight" id="_40_weight" value="66"></td>
+			</tr>
+			<tr>
+				<th>50대</th>
+				<td><input type="number" name="_50_orig" id="_50_orig" value="121"></td>
+				<td><input type="number" name="_50_weight" id="_50_weight" value="107"></td>
+			</tr>
+			<tr>
+				<th>60대</th>
+				<td><input type="number" name="_60_orig" id="_60_orig" value="247"></td>
+				<td><input type="number" name="_60_weight" id="_60_weight" value="260"></td>
+			</tr>
+			<tr>
+				<th colspan="1" id="area_span">지역별</th>
+				<td><input type="text" name="area_name_1" id="area_name_1" value="지역1"></td>
+				<td><input type="number" name="area_orig_1" id="area_orig_1" value="0"></td>
+				<td><input type="number" name="area_weight_1" id="area_weight_1" value="0"></td>
+			</tr>
+			<tr>
+				<th></th>
+				<td><button type="button" onclick="insertArea()">지역 추가</button></td>
+			</tr>
+		</table>
+		<h3>조사방법</h3>
+		<table>
+			<tr>
+				<th colspan="4" align="center">피조사자 선정방법</th>
+			</tr>
+			<tr>
+				<th rowspan="3">표본추출틀</th>
+				<th rowspan="3">전체</th>
+				<th>추출틀</th>
+				<td><input type="text" name="sample_frame" id="sample_frame" value="무선전화번호,가상번호"></td>
+			</tr>
+			<tr>
+				<th>규모</th>
+				<td><input type="number" name="sample_size" id="sample_size" value="9864"></td>
+			</tr>
+			<tr>
+				<th>구축방법</th>
+				<td><input type="text" name="sample_method" id="sample_method" value="통신사 제공 휴대전화 가상번호"></td>
+			</tr>
+			<tr>
+				<th colspan="4">전체</th>
+			</tr>
+			<tr>
+				<th colspan="2">전체 무선 비율</th>
+				<td colspan="2"><input type="number" name="mobile_ratio" id="mobile_ratio" value="100"></td>
+			</tr>
+			<tr>
+				<th colspan="2">접촉 후 거절 및 중도 이탈 사례수 (R) 합계</th>
+				<td colspan="2"><input type="number" name="sample_R" id="sample_R" value="2825"></td>
+			</tr>
+			<tr>
+				<th colspan="2">접촉 후 응답완료 사례수 (I) 합계</th>
+				<td colspan="2"><input type="number" name="sample_I" id="sample_I" value="500"></td>
+			</tr>
+			<tr>
+				<th colspan="2">전체 합계</th>
+				<td colspan="2"><input type="number" name="sample_sum" id="sample_sum" value="7413"></td>
+			</tr>
+			<tr>
+				<th colspan="2">전체 접촉률</th>
+				<td colspan="2"><input type="number" name="contact_ratio" id="contact_ratio" value="47.6"></td>
+			</tr>
+			<tr>
+				<th colspan="2">전체 응답률</th>
+				<td colspan="2"><input type="number" name="response_ratio" id="response_ratio" value="15.0"></td>
+			</tr>
+		</table>
+		<h3>여론조사 결과</h3>
+		<table>
+			<tr>
+				<th colspan="3">가중값 산출 및 적용방법</th>
+			</tr>
+			<tr>
+				<th rowspan="2">기본가중</th>
+				<th>산출방법</th>
+				<td><input type="text" name="weight1_calc" id="weight1_calc" value="국가 인구통계에 따른 성, 연령, 지역별 가중치 부여"></td>
+			</tr>
+			<tr>
+				<th>적용방법</th>
+				<td><input type="text" name="weight1_apply" id="weight1_apply" value="림가중"></td>
+			</tr>
+			<tr>
+				<th rowspan="2">추가가중</th>
+				<th>산출방법</th>
+				<td><input type="text" name="weight2_calc" id="weight2_calc"></td>
+			</tr>
+			<tr>
+				<th>적용방법</th>
+				<td><input type="text" name="weight2_apply" id="weight2_apply"></td>
+			</tr>
+			<tr>
+				<th rowspan="2">표본오차</th>
+				<th>신뢰수준</th>
+				<td><input type="number" name="trust" id="trust" value="95"></td>
+			</tr>
+			<tr>
+				<th>오차범위</th>
+				<td><input type="number" name="error" id="error" value="4.4"></td>
+			</tr>
+			<tr>
+				<th colspan="3">여론조사결과</th>
+			</tr>
+			<tr>
+				<th colspan="2">공표-보도 매체</th>
+				<td><input type="text" name="publish_media" id="publish_media" value="방송(인터넷)신문-뉴스통신"></td>
+			</tr>
+			<tr>
+				<th colspan="2">공표-보도 매체명</th>
+				<td><input type="text" name="publisher" id="publisher" value="에브리뉴스"></td>
+			</tr>
+			<tr>
+				<th colspan="2">최초 공표-보도 지정일시</th>
+				<td><input type="datetime-local" name="publish_date" id="publish_date" value="2022-01-24T16:00"></td>
+			</tr>
+		</table>
+		<input type="submit" name="submit" value="질문 상세 등록">
+	</form>
+</body>
+
+<script type="text/javascript">
+	function insertDate() {
+		var table = document.getElementById("basic");
+
+		// Delete last row
+		table.deleteRow(-1);
+
+		var rows = table.getElementsByTagName("tr");
+		var idx = rows.length;
+		
+		// Insert new row
+		var row = table.insertRow(idx);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		cell2.innerHTML = "<input type=\"datetime-local\" name=\"polltime_start_"+idx+"\" id=\"polltime_start_"+idx+"\">";
+		var cell3 = row.insertCell(2);
+		cell3.innerHTML = "~";
+		var cell4 = row.insertCell(3);
+		cell4.innerHTML = "<input type=\"datetime-local\" name=\"polltime_end_"+idx+"\" id=\"polltime_end_"+idx+"\">";
+
+		// Insert addition row
+		row = table.insertRow(-1);
+		cell1 = row.insertCell(0);
+		cell2 = row.insertCell(1);
+		cell2.colSpan = 3;
+		cell2.innerHTML = "<button type=\"button\" onclick=\"insertDate()\">+</button>";
+	}
+
+	function insertArea(){
+		var table = document.getElementById("sampleSize");
+		// Delete last row
+		table.deleteRow(-1);
+
+		var rows = table.getElementsByTagName("tr");
+		var idx = rows.length+1;
+
+		// Insert new row
+		var row = table.insertRow(-1);
+		var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+		cell1.innerHTML = "<input type=\"text\" name=\"area_name_"+idx+"\" id=\"area_name_"+idx+"\" value=\"지역"+idx+"\">";
+		var cell2 = row.insertCell(2);
+		cell2.innerHTML = "<input type=\"text\" name=\"area_orig_"+idx+"\" id=\"area_orig_"+idx+"\" value=\"0\">";
+		var cell3 = row.insertCell(3);
+		cell3.innerHTML = "<input type=\"text\" name=\"area_weight_"+idx+"\" id=\"area_weight_"+idx+"\" value=\"0\">";
+
+		// Insert addition row
+		row = table.insertRow(-1);
+		cell1 = row.insertCell(0);
+		cell2 = row.insertCell(1);
+		cell2.innerHTML = "<td><button type=\"button\" onclick=\"insertArea()\">지역 추가</button></td>"
+	}
+</script>
+
+</html>
